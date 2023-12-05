@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.project5.dto.ProductDto;
+import com.ecommerce.project5.exception.ProductNotFoundException;
 import com.ecommerce.project5.model.Category;
 import com.ecommerce.project5.model.Product;
 import com.ecommerce.project5.repository.ProductRepository;
@@ -62,6 +63,16 @@ public class ProductService {
 		prd.setName(productDto.getName());
 		prd.setPrice(productDto.getPrice());
 		productRepository.save(prd);
+	}
+
+	public Product findById(Integer product_id) throws ProductNotFoundException {
+		Optional<Product> cartProduct = productRepository.findById(product_id);
+		if (cartProduct.isEmpty()) {
+			throw new ProductNotFoundException("product id is not valid " + product_id);
+		}
+
+		return cartProduct.get();
+
 	}
 
 }
